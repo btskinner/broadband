@@ -71,8 +71,14 @@ bb_df <- bind_rows(bb_df_list) %>%
 ## disconnect from broadband database
 dbDisconnect(bb_con)
 
+## get names to limit for map
+cn <- read_tsv(ddir %+% 'countynames.tsv')
+ct <- cn %>% .[['id']]
+
 ## make wide for map
 df <- bb_df %>%
+    ## limit to available counties
+    filter(fips %in% ct) %>%
     mutate(tab = recode(tab,
                         'December_2010' = 1L,
                         'June_2011' = 2L,
@@ -86,10 +92,16 @@ df <- bb_df %>%
     gather(measure, val, -c(fips,tab)) %>%
     unite('mt', c('measure','tab'), sep = '') %>%
     spread(mt, val) %>%
-    rename(f = fips)
+    rename(id = fips)
 
 ## write
-write_tsv(df, ddir %+% 'map_data.tsv', na = '')
+write_tsv(df, ddir %+% 'map_data.tsv', na = '000')
+
+## make sure county names is also same length
+cn <- cn %>% filter(id %in% bb_df$fips)
+
+## write
+write_tsv(cn, ddir %+% 'countynames.tsv')
 
 ## =============================================================================
 ## END SCRIPT
