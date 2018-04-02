@@ -32,9 +32,9 @@ function init() {
 
     // wait until load all
     queue()
-	.defer(d3.json, "/data/us.json")
-	.defer(d3.tsv, "/data/map_data.tsv")
-	.defer(d3.tsv, "/data/countynames.tsv")
+	.defer(d3.json, "/broadband/data/us.json")
+	.defer(d3.tsv, "/broadband/data/map_data.tsv")
+	.defer(d3.tsv, "/broadband/data/countynames.tsv")
 	.await(function(error, us, data, names) {
 	    spinner.stop();
 	    ready(us, data, names);
