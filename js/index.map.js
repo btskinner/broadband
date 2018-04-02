@@ -1,6 +1,3 @@
----
----
-
 // loader settings
 var opts = {
     lines: 13
@@ -35,9 +32,9 @@ function init() {
 
     // wait until load all
     queue()
-	.defer(d3.json, "{{ site.siteurl }}/data/us.json")
-	.defer(d3.tsv, "{{ site.siteurl }}/data/map_data.tsv")
-	.defer(d3.tsv, "{{ site.siteurl }}/data/countynames.tsv")
+	.defer(d3.json, "/data/us.json")
+	.defer(d3.tsv, "/data/map_data.tsv")
+	.defer(d3.tsv, "/data/countynames.tsv")
 	.await(function(error, us, data, names) {
 	    spinner.stop();
 	    ready(us, data, names);
