@@ -1,0 +1,169 @@
+/* Containers --------------------------------- */
+
+#viz-container {
+    position: relative;
+    width: 960px;
+    min-height: 640px;
+    margin-bottom: 10rem;
+}
+
+#map-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 640px;
+}
+
+#submap-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+#buttons-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+}
+
+#tooltip-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    margin-top: 1rem;
+    text-align: right;
+}
+
+#slider-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-top: 3.5rem;
+    width: 100%;
+}
+
+/* Selectors/Buttons -------------------------- */
+
+#sample {
+    position: absolute;
+    margin-left: 0px;
+    margin-top: 14px;
+}
+
+#play {
+    position: absolute;
+    margin-left: 175px;
+    margin-top: 8px;
+}
+
+.fa-play:hover {
+    color: #0074d9;
+}
+
+.fa-pause:hover {
+    color: #0074d9;
+}
+
+/* Tooltip ------------------------------------ */
+
+#tooltip {
+    position: relative;
+    background-color: #fff;
+    color: #000;
+    display: none;
+}
+
+.tooltip_key {
+    font-weight: bold;
+}
+
+.tooltip_value {
+    float: right;
+}
+
+
+/* Slider ------------------------------------- */
+
+.d3-slider {
+    position: relative;
+    font-size: 1.1em;
+    border: 1px solid #aaaaaa;
+    z-index: 2;
+}
+
+.d3-slider-horizontal {
+    height: .8em;
+}
+
+.d3-slider-range {
+    background: #2980b9;
+    left: 0px;
+    right: 0px;
+    height: 0.8em;
+    position: absolute;
+}
+
+.d3-slider-handle {
+    position: absolute;
+    width: 1.2em;
+    height: 1.2em;
+    border: 1px solid #d3d3d3;
+    border-radius: 4px;
+    background: #eee;
+    background: linear-gradient(to bottom, #eee 0%, #ddd 100%);
+    z-index: 3;
+}
+
+.d3-slider-handle:hover {
+    border: 1px solid #999999;
+}
+
+.d3-slider-horizontal .d3-slider-handle {
+    top: -.3em;
+    margin-left: -.6em;
+}
+
+.d3-slider-axis {
+    position: relative;
+    z-index: 1;
+}
+
+.d3-slider-axis-bottom {
+    top: .8em;
+}
+
+.d3-slider-axis-right {
+    left: .8em;
+}
+
+.d3-slider-axis path {
+    stroke-width: 0;
+    fill: none;
+}
+
+.d3-slider-axis line {
+    fill: none;
+    stroke: #aaa;
+    shape-rendering: crispEdges;
+}
+
+.d3-slider-axis text {
+    font-size: 1.2rem;
+}
+
+
+/* Map classes -------------------------------- */
+
+.counties {
+    fill: none;
+}
+
+.states {
+    fill: none;
+    stroke: #fff;
+    stroke-linejoin: round;
+}

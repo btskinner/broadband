@@ -1,0 +1,6 @@
+.Rhistory
+_site
+_site_dev
+.sass-cache
+.DS_Store
+data/bb.db
