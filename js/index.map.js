@@ -52,6 +52,7 @@ function ready(us, data, names) {
     , maxtime = "8"
     , time = mintime
     , measure = "d"
+    , fccdef = "pre"
     , currentFrame = 0
     , frameLength = +maxtime - +mintime
     , interval
@@ -60,6 +61,7 @@ function ready(us, data, names) {
 
     // measure number
     var measure_num = {"d":0,"u":1,"p":2};
+    var fccdef_num = {"pre":0,"post":1};
 
     // get date names
     var dnames = ['',
@@ -87,56 +89,62 @@ function ready(us, data, names) {
     // 
     var colorDomain = [0,1,2,3,4,5,6,7,8,9,10];
     var legendLabels = [
-	["Missing",
-	 "200 KB/sec <= x < 768 KB/sec",
-	 "768 KB/sec <= x < 1.5 MB/sec",
-	 "1.5 MB/sec <= x < 3 MB/sec",
-	 "3MB/sec <= x < 6MB/sec",
-	 "6 MB/sec <= x < 10 MB/sec",
-	 "10 MB/sec <= x < 25 MB/sec",
-	 "25 MB/sec <= x < 50 MB/sec",
-	 "50 MB/sec <= x < 100 MB/sec",
-	 "100 MB/sec <= x < 1 GB/sec",
-	 "x > 1 GB/sec"]
-	, ["Missing",
-	   "200 KB/sec <= x < 768 KB/sec",
-	   "768 KB/sec <= x < 1.5 MB/sec",
-	   "1.5 MB/sec <= x < 3 MB/sec",
-	   "3MB/sec <= x < 6MB/sec",
-	   "6 MB/sec <= x < 10 MB/sec",
-	   "10 MB/sec <= x < 25 MB/sec",
-	   "25 MB/sec <= x < 50 MB/sec",
-	   "50 MB/sec <= x < 100 MB/sec",
-	   "100 MB/sec <= x < 1 GB/sec",
-	   "x > 1 GB/sec"]
+	["Missing","Tier 1","Tier 2","Tier 3","Tier 4","Tier 5","Tier 6",
+	 "Tier 7","Tier 8","Tier 9","Tier 10"]
+	, ["Missing","Tier 1","Tier 2","Tier 3","Tier 4","Tier 5","Tier 6",
+	 "Tier 7","Tier 8","Tier 9","Tier 10"]
 	, ["0","1","2","3","4","5","6","7","8","9","10"]	
     ];
+    var colorScale = [
+	// download: pre/post
+	[
+	    ["#fff","#cb181d","#fb6a4a","#fcae91","#fee5d9","#eff3ff",
+	     "#c6dbef","#9ecae1","#6baed6","#3182bd","#08519c"]
+	    ,["#fff","#99000d","#cb181d","#ef3b2c","#fb6a4a","#fc9272",
+	      "#fcbba1","#fee5d9","#deebf7","#9ecae1","#3182bd"]
+	]
+	,
+	// upload: pre/post
+	[
+	    ["#fff","#fc9272","#fee0d2","#f7fbff","#deebf7","#c6dbef",
+	     "#9ecae1","#6baed6","#4292c6","#2171b5","#084594"]
+	    ,["#fff","#de2d26","#fc9272","#fee0d2","#eff3ff","#c6dbef",
+	      "#9ecae1","#6baed6","#4292c6","#2171b5","#084594"]
+	]
+	,
+	// providers
+	[
+	    ["#fff","#fff7ec","#fee8c8","#fdd49e","#fdbb84","#fc8d59",
+	     "#ef6548","#d7301f","#b30000","#7f0000","4#c0000"]
+	    ,["fff","#fff7ec","#fee8c8","#fdd49e","#fdbb84","#fc8d59",
+	      "#ef6548","#d7301f","#b30000","#7f0000","4#c0000"]
+	]
+    ];
  
-    // color function
-    var color = d3.scale.ordinal()
-	.range(colorbrewer.RdBu[11])
-	.domain(colorDomain);
-
     // project paths
     var path = d3.geo.path()
 	.projection(projection);
-
+    
     // hash to associate names with counties for mouse-over
     var id_name_map = {};
     for (var i = 0; i < names.length; i++) {
 	id_name_map[names[i].id] = names[i].name;
     }
-
+    
     // init map svg
     var svg = d3.select("#map-container").append("svg")
 	.attr("width", width)
 	.attr("height", height);
 
     // function to draw map
-    function drawMap(dataColumn) {
+    function drawMap(dataColumn, fccdef) {
 
 	// init mapping function for getting decile by id
 	var decById = d3.map();
+
+	var color = d3.scale.ordinal()
+	.range(colorScale[measure_num[measure]][fccdef_num[fccdef]])
+	.domain([0,1,2,3,4,5,6,7,8,9,10])
 
 	// for each row in data, peel off first digit of value in
 	// selected column and associate with id (fips)
@@ -195,7 +203,7 @@ function ready(us, data, names) {
     // function for drawing the legend; separate from drawMap b/c
     // don't need to redraw every time map changes -- only when school
     // sample changes
-    function drawLegend(dataColumn) {
+    function drawLegend(dataColumn, fccdef) {
 
 	// clear old
 	svg.selectAll("g.legendOrd").remove();
@@ -203,28 +211,35 @@ function ready(us, data, names) {
 	// build up legend, locate it, and call it
 	svg.append("g")
 	    .attr("class", "legendOrd")
-	    .attr("transform", "translate(0,470)");
+	    .attr("transform", "translate(0,440)");
 
 	var legendOrd = d3.legend.color()
 	    .labels(legendLabels[measure_num[measure]])
 	    .scale(d3.scale.ordinal()
-		   .range(colorbrewer.RdBu[11])
+		   .range(colorScale[measure_num[measure]][fccdef_num[fccdef]])
 		   .domain([0,1,2,3,4,5,6,7,8,9,10]));
 
 	svg.select(".legendOrd")
 	    .call(legendOrd);
-
+	
     }
 
     // draw map and legend for first time
-    drawMap(dataColumn);
-    drawLegend(dataColumn);
+    drawMap(dataColumn, fccdef);
+    drawLegend(dataColumn, fccdef);
 
     // if sample selector changes, redraw map and legend
     d3.select("#sample").on("change", function() {
 	measure = this.value;
-	drawMap(measure + time);
-	drawLegend(measure + time);
+	drawMap(measure + time, fccdef);
+	drawLegend(measure + time, fccdef);
+    });
+
+    // if fcc definition selector changes, redraw map and legend
+    d3.select("#fccdef").on("change", function() {
+	fccdef = this.value;
+	drawMap(measure + time, fccdef);
+	drawLegend(measure + time, fccdef);
     });
 
     // if year slider moves, redraw map only
@@ -256,7 +271,7 @@ function ready(us, data, names) {
 	    time = String(value);
 
 	    // draw the map
-	    drawMap(measure + time);
+	    drawMap(measure + time, fccdef);
 
 	});
 
@@ -302,7 +317,7 @@ function ready(us, data, names) {
 	    time = String(y);
 
 	    // draw the map
-	    drawMap(measure + time);
+	    drawMap(measure + time, fccdef);
 	}, playTime);
     }
 }

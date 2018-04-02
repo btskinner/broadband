@@ -54,9 +54,15 @@
     margin-top: 14px;
 }
 
+#fccdef {
+    position: absolute;
+    margin-left: 170px;
+    margin-top: 14px;
+}
+
 #play {
     position: absolute;
-    margin-left: 175px;
+    margin-left: 300px;
     margin-top: 8px;
 }
 
