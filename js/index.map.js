@@ -85,7 +85,7 @@ function ready(us, data, names) {
 	.translate([width / 2, height / 2]);
 
     // 
-    var colorDomain = [0,1,2,3,4,5,6,7,8,9];
+    var colorDomain = [0,1,2,3,4,5,6,7,8,9,10];
     var legendLabels = [
 	["Missing",
 	 "200 KB/sec <= x < 768 KB/sec",
@@ -96,7 +96,8 @@ function ready(us, data, names) {
 	 "10 MB/sec <= x < 25 MB/sec",
 	 "25 MB/sec <= x < 50 MB/sec",
 	 "50 MB/sec <= x < 100 MB/sec",
-	 "100 MB/sec <= x < 1 GB/sec"]
+	 "100 MB/sec <= x < 1 GB/sec",
+	 "x > 1 GB/sec"]
 	, ["Missing",
 	   "200 KB/sec <= x < 768 KB/sec",
 	   "768 KB/sec <= x < 1.5 MB/sec",
@@ -106,13 +107,14 @@ function ready(us, data, names) {
 	   "10 MB/sec <= x < 25 MB/sec",
 	   "25 MB/sec <= x < 50 MB/sec",
 	   "50 MB/sec <= x < 100 MB/sec",
-	   "100 MB/sec <= x < 1 GB/sec"]
-	, ["0","1","2","3","4","5","6","7","8","9"]	
+	   "100 MB/sec <= x < 1 GB/sec",
+	   "x > 1 GB/sec"]
+	, ["0","1","2","3","4","5","6","7","8","9","10"]	
     ];
  
     // color function
     var color = d3.scale.ordinal()
-	.range(colorbrewer.RdBu[10])
+	.range(colorbrewer.RdBu[11])
 	.domain(colorDomain);
 
     // project paths
@@ -206,8 +208,8 @@ function ready(us, data, names) {
 	var legendOrd = d3.legend.color()
 	    .labels(legendLabels[measure_num[measure]])
 	    .scale(d3.scale.ordinal()
-		   .range(colorbrewer.RdBu[10])
-		   .domain([0,1,2,3,4,5,6,7,8,9]));
+		   .range(colorbrewer.RdBu[11])
+		   .domain([0,1,2,3,4,5,6,7,8,9,10]));
 
 	svg.select(".legendOrd")
 	    .call(legendOrd);
